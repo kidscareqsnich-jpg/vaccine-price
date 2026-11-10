@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ราคาวัคซีนตามช่วงอายุ · Kids Care Premium Clinic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#b8913a; --goldSoft:#f8f0dc; --goldLine:#ead9ae;
+  --blue:#4f8fc4; --blueSoft:#e8f2fb; --pink:#d9779a; --pinkSoft:#fcebf1;
+  --ink:#2f2a24; --muted:#7a7166; --line:#efe7d8; --bg:#fffdf8; --free:#3f9a6b; --freeSoft:#e7f5ed;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Sarabun",system-ui,sans-serif;line-height:1.5;font-size:16px}
+.p{font-family:"Prompt",sans-serif}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px}
+header{background:linear-gradient(135deg,#fbf3df 0%,#e8f2fb 55%,#fcebf1 100%);border-bottom:1px solid var(--goldLine);padding:18px 0 16px}
+.brand{font-size:12px;letter-spacing:.06em;color:var(--gold);font-family:"Prompt",sans-serif;font-weight:600}
+h1{font-family:"Prompt",sans-serif;font-size:22px;margin:4px 0 2px;font-weight:600}
+.sub{font-size:13px;color:var(--muted)}
+.sec{margin-top:18px}
+.lbl{font-family:"Prompt",sans-serif;font-size:14px;font-weight:600;margin-bottom:8px;color:var(--ink)}
+.ages{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.age{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:10px 4px;text-align:center;cursor:pointer;font-family:"Prompt",sans-serif;font-size:15px;color:var(--ink)}
+.age small{display:block;font-family:"Sarabun",sans-serif;font-size:11px;color:var(--muted);line-height:1.2;margin-top:2px}
+.age.on{border-color:var(--gold);background:var(--goldSoft);box-shadow:0 0 0 2px var(--goldLine) inset}
+.opts{display:grid;gap:10px}
+.opt{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.opt .t{font-size:13px;color:var(--muted);margin-bottom:6px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.seg button{font:inherit;font-size:14px;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:8px 6px;cursor:pointer;color:var(--ink);line-height:1.3}
+.seg button small{display:block;font-size:12px;color:var(--muted)}
+.seg button.on{border-color:var(--blue);background:var(--blueSoft)}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 4px 18px rgba(184,145,58,.08)}
+.card h2{font-family:"Prompt",sans-serif;font-size:19px;margin:0 0 2px}
+.card .note{font-size:13px;color:var(--pink);margin-bottom:6px}
+.row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line);align-items:flex-start}
+.row:last-child{border-bottom:0}
+.row .nm{font-family:"Prompt",sans-serif;font-weight:500}
+.row .ds{font-size:13px;color:var(--muted)}
+.row .pr{font-family:"Prompt",sans-serif;white-space:nowrap;font-weight:500}
+.free{color:var(--free);background:var(--freeSoft);border-radius:999px;padding:1px 10px;font-size:13px}
+.grp{font-family:"Prompt",sans-serif;font-size:13px;color:var(--gold);margin:12px 0 2px;font-weight:600}
+.addon{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--line);cursor:pointer}
+.addon:last-child{border-bottom:0}
+.addon input{width:20px;height:20px;margin-top:2px;accent-color:var(--pink);flex:none}
+.addon .mid{flex:1}
+.total{margin-top:14px;background:linear-gradient(135deg,#fbf3df,#fff);border:1px solid var(--goldLine);border-radius:16px;padding:14px 16px}
+.tl{display:flex;justify-content:space-between;font-size:14px;padding:3px 0;color:var(--muted)}
+.tl b{color:var(--ink);font-weight:500;font-family:"Prompt",sans-serif}
+.big{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--goldLine);margin-top:8px;padding-top:10px}
+.big span{font-family:"Prompt",sans-serif;font-weight:600}
+.big b{font-family:"Prompt",sans-serif;font-size:26px;color:var(--gold)}
+.reimb{margin-top:6px;font-size:13px;color:var(--blue);text-align:right}
+.others .row .nm{font-weight:400}
+.fine{font-size:12px;color:var(--muted);margin:22px 0 30px;line-height:1.6}
+.hint{text-align:center;color:var(--muted);padding:26px 10px;border:1.5px dashed var(--goldLine);border-radius:16px;background:#fff}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand">KIDS CARE PREMIUM CLINIC</div>
+    <h1>ลูกอายุเท่านี้ ฉีดอะไร จ่ายเท่าไหร่?</h1>
+    <div class="sub">ราคาวัคซีนพรีเมียมคลินิก สถาบันสุขภาพเด็กแห่งชาติมหาราชินี</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="sec">
+    <div class="lbl">เลือกอายุของลูก</div>
+    <div class="ages" id="ages"></div>
+  </div>
+
+  <div class="sec" id="result">
+    <div class="hint">แตะเลือกอายุด้านบน เพื่อดูวัคซีนและค่าใช้จ่ายของครั้งนั้น</div>
+  </div>
+
+  <div class="sec others">
+    <div class="lbl">วัคซีนทางเลือกอื่น (สอบถามแพทย์เรื่องอายุที่เหมาะสม)</div>
+    <div class="card" id="others"></div>
+  </div>
+
+  <p class="fine">
+    • ราคาอ้างอิงตารางวัคซีนและราคาของคลินิก ปี 2568 อาจมีการเปลี่ยนแปลง กรุณาสอบถามเจ้าหน้าที่อีกครั้งก่อนรับบริการ<br>
+    • ยอดที่แสดงเป็นค่าใช้จ่าย <b>ต่อการมา 1 ครั้ง</b> ประกอบด้วย ค่าวัคซีน + ค่าให้วัคซีน 30 บาท/เข็มหรือครั้งที่หยอด + ค่าบริการ 720 บาท<br>
+    • วัคซีนบางชนิดต้องฉีดมากกว่า 1 เข็ม แพทย์จะนัดเข็มถัดไปและแจ้งค่าใช้จ่ายอีกครั้ง<br>
+    • ตารางนี้ใช้เพื่อประมาณค่าใช้จ่ายเท่านั้น แพทย์อาจปรับวัคซีนตามประวัติและสุขภาพของเด็กแต่ละคน
+  </p>
+</main>
+
+<script>
+/* ================= ตั้งค่าราคา (แก้ตรงนี้ที่เดียว) ================= */
+const FEE = { service: 720, perDose: 30, govReimburse: 50 };
+const P = { // ราคาวัคซีน (บาท/เข็ม)
+  "Engerix-B":232, "Hexaxim":1267, "Pentaxim":928, "PCV13":1270, "PCV20":2533, "Rotarix":854,
+  "Vaxigrip":192, "Enterovac":2697, "Havrix 720":725, "Varivax":850, "Boostrix-Polio":828,
+  "Qdenga":1639, "Beyfortus":13812, "Pneumovax 23":1304, "Gardasil":2564, "Gardasil-9":5593
+};
+/* ================= ตารางตามช่วงอายุ ================= */
+// main: วัคซีนหลัก · add: วัคซีนเสริมให้ติ๊กเลือก
+// type: "pcv" / "rota" = เปลี่ยนตามตัวเลือกด้านบน
+const AGES = [
+  {id:"m1", tab:"1 ด.", sub:"แม่เป็นพาหะ HBV", title:"อายุ 1 เดือน", note:"เฉพาะเด็กที่แม่เป็นพาหะไวรัสตับอักเสบบี",
+    main:[{v:"Engerix-B", d:"ไวรัสตับอักเสบบี"}]},
+  {id:"m2", tab:"2 ด.", title:"อายุ 2 เดือน",
+    main:[{v:"Hexaxim", d:"6 โรค: คอตีบ-บาดทะยัก-ไอกรน-ตับอักเสบบี-ฮิบ-โปลิโอ"},{type:"rota",n:1},{type:"pcv",n:1}]},
+  {id:"m4", tab:"4 ด.", title:"อายุ 4 เดือน",
+    main:[{v:"Pentaxim", d:"5 โรค: คอตีบ-บาดทะยัก-ไอกรน-ฮิบ-โปลิโอ"},{type:"rota",n:2},{type:"pcv",n:2}]},
+  {id:"m6", tab:"6 ด.", title:"อายุ 6 เดือน",
+    main:[{v:"Hexaxim", d:"6 โรค: คอตีบ-บาดทะยัก-ไอกรน-ตับอักเสบบี-ฮิบ-โปลิโอ"},{type:"rota",n:3},{type:"pcv",n:3}],
+    add:[{v:"Vaxigrip", d:"ไข้หวัดใหญ่ · ปีแรกฉีด 2 เข็ม แล้วฉีดปีละครั้ง"},
+         {v:"Enterovac", d:"โรคมือ-เท้า-ปาก (EV71) · ฉีด 2 เข็ม"}]},
+  {id:"m9", tab:"9 ด.", title:"อายุ 9 เดือน",
+    main:[{free:true, n:"MMR เข็มที่ 1", d:"หัด-คางทูม-หัดเยอรมัน"}]},
+  {id:"y1", tab:"1 ปี", title:"อายุ 1 ปี",
+    main:[{free:true, n:"CD-JE เข็มที่ 1", d:"ไข้สมองอักเสบเจอี ชนิดเชื้อเป็น"},{type:"pcv",n:4}],
+    add:[{v:"Havrix 720", d:"ตับอักเสบเอ · ฉีด 2 เข็ม"},{v:"Varivax", d:"อีสุกอีใส เข็มที่ 1"}]},
+  {id:"m18", tab:"1½ ปี", title:"อายุ 1 ปี 6 เดือน",
+    main:[{free:true, n:"MMR เข็มที่ 2", d:"หัด-คางทูม-หัดเยอรมัน"},{v:"Pentaxim", d:"5 โรค: คอตีบ-บาดทะยัก-ไอกรน-ฮิบ-โปลิโอ"}]},
+  {id:"m30", tab:"2½ ปี", title:"อายุ 2 ปี 6 เดือน",
+    main:[{free:true, n:"CD-JE เข็มที่ 2", d:"ไข้สมองอักเสบเจอี ชนิดเชื้อเป็น"}]},
+  {id:"y4", tab:"4 ปี", title:"อายุ 4 ปี",
+    main:[{v:"Boostrix-Polio", d:"คอตีบ-บาดทะยัก-ไอกรน-โปลิโอ กระตุ้น"}],
+    add:[{v:"Varivax", d:"อีสุกอีใส เข็มที่ 2"}]}
+];
+const OTHERS = [
+  {v:"Qdenga", d:"ไข้เลือดออก"},
+  {v:"Beyfortus", d:"ภูมิคุ้มกันสำเร็จรูปป้องกัน RSV"},
+  {v:"Pneumovax 23", d:"ปอดอักเสบ ชนิดโพลีแซคคาไรด์ (PPSV23)"},
+  {v:"Gardasil", d:"มะเร็งปากมดลูก HPV 4 สายพันธุ์"},
+  {v:"Gardasil-9", d:"มะเร็งปากมดลูก HPV 9 สายพันธุ์"}
+];
+
+/* ================= การทำงาน ================= */
+const S = { age:null, pcv:"13", rota:"free", right:"general", add:{} };
+const baht = n => n.toLocaleString("th-TH");
+const $ = id => document.getElementById(id);
+
+function expand(item){
+  if(item.type==="pcv"){const v="PCV"+S.pcv;return {n:`${v} เข็มที่ ${item.n}`, d:"ปอดอักเสบ (IPD)", price:P[v]};}
+  if(item.type==="rota"){
+    if(S.rota==="free") return {n:`โรต้า ครั้งที่ ${item.n}`, d:"หยอด · ตัวฟรี", price:0};
+    if(item.n>2) return null; // Rotarix หยอด 2 ครั้ง
+    return {n:`Rotarix ครั้งที่ ${item.n}`, d:"โรต้า (หยอด)", price:P.Rotarix};
+  }
+  if(item.free) return {n:item.n, d:item.d, price:0};
+  return {n:item.v, d:item.d, price:P[item.v]};
+}
+const priceTag = p => p===0?'<span class="free">ฟรี</span>':baht(p)+" ฿";
+
+function render(){
+  document.querySelectorAll(".age").forEach(b=>b.classList.toggle("on",b.dataset.id===S.age));
+  const a = AGES.find(x=>x.id===S.age);
+  if(!a){return;}
+  const main = a.main.map(expand).filter(Boolean);
+  const adds = (a.add||[]).map((x,i)=>({key:a.id+"-"+i, n:x.v, d:x.d, price:P[x.v]}));
+  const chosen = adds.filter(x=>S.add[x.key]);
+  const items = main.concat(chosen);
+  const vac = items.reduce((s,x)=>s+x.price,0);
+  const doses = items.length;
+  const admin = doses*FEE.perDose;
+  const total = vac+admin+FEE.service;
+
+  const hasPcv=a.main.some(x=>x.type==="pcv"), hasRota=a.main.some(x=>x.type==="rota");
+  const seg=(k,t,opts)=>`<div class="opt"><div class="t">${t}</div><div class="seg" data-k="${k}">${opts.map(o=>`<button data-v="${o[0]}" class="${S[k]===o[0]?"on":""}">${o[1]}<small>${o[2]}</small></button>`).join("")}</div></div>`;
+  let opts="";
+  if(hasPcv) opts+=seg("pcv","เลือกวัคซีนปอดอักเสบ (IPD) · ชุดนี้ฉีด 4 เข็ม: 2, 4, 6 เดือน, 1 ปี",[["13","PCV13","1,270 บาท/เข็ม"],["20","PCV20","2,533 บาท/เข็ม"]]);
+  if(hasRota) opts+=seg("rota","เลือกวัคซีนโรต้า (หยอด)",[["free","ตัวฟรี","3 ครั้ง: 2, 4, 6 ด."],["rotarix","Rotarix 854 บาท","2 ครั้ง: 2, 4 ด."]]);
+  let h = `<div class="card"><h2>${a.title}</h2>${a.note?`<div class="note">${a.note}</div>`:""}
+    ${opts?`<div class="opts" style="margin:10px 0 4px">${opts}</div>`:""}
+    <div class="grp">วัคซีนตามช่วงอายุ</div>
+    ${main.map(x=>`<div class="row"><div><div class="nm">${x.n}</div><div class="ds">${x.d}</div></div><div class="pr">${priceTag(x.price)}</div></div>`).join("")}`;
+  if(adds.length){
+    h += `<div class="grp">วัคซีนเสริม (แตะเพื่อเลือก)</div>` + adds.map(x=>`
+      <label class="addon"><input type="checkbox" data-key="${x.key}" ${S.add[x.key]?"checked":""}>
+      <div class="mid"><div class="nm p">${x.n}</div><div class="ds" style="font-size:13px;color:var(--muted)">${x.d}</div></div>
+      <div class="pr p">${baht(x.price)} ฿</div></label>`).join("");
+  }
+  h += `<div class="opts" style="margin-top:14px">${seg("right","สิทธิการรักษา",[["general","ทั่วไป / ชำระเอง",""],["gov","ข้าราชการ","เบิกค่าบริการได้ 50 บาท"]])}</div>
+    <div class="total">
+      <div class="tl">ค่าวัคซีน<b>${baht(vac)} ฿</b></div>
+      <div class="tl">ค่าให้วัคซีน (${doses} × ${FEE.perDose})<b>${baht(admin)} ฿</b></div>
+      <div class="tl">ค่าบริการ<b>${baht(FEE.service)} ฿</b></div>
+      <div class="big"><span>รวมครั้งนี้</span><b>${baht(total)} ฿</b></div>
+      ${S.right==="gov"?`<div class="reimb">ข้าราชการเบิกคืนได้ ${FEE.govReimburse} ฿ · จ่ายสุทธิ ${baht(total-FEE.govReimburse)} ฿</div>`:""}
+    </div></div>`;
+  $("result").innerHTML = h;
+  $("result").querySelectorAll("input[type=checkbox]").forEach(cb=>cb.addEventListener("change",()=>{S.add[cb.dataset.key]=cb.checked;render();}));
+}
+
+// สร้างปุ่มอายุ
+$("ages").innerHTML = AGES.map(a=>`<button class="age" data-id="${a.id}">${a.tab}${a.sub?`<small>${a.sub}</small>`:""}</button>`).join("");
+$("ages").addEventListener("click",e=>{const b=e.target.closest(".age");if(!b)return;S.age=b.dataset.id;
+  try{history.replaceState(null,"","#"+S.age);}catch(_){}
+  render();$("result").scrollIntoView({behavior:"smooth",block:"start"});});
+$("result").addEventListener("click",e=>{const b=e.target.closest(".seg button");if(!b)return;S[b.parentElement.dataset.k]=b.dataset.v;render();});
+$("others").innerHTML = OTHERS.map(o=>`<div class="row"><div><div class="nm">${o.v}</div><div class="ds">${o.d}</div></div><div class="pr">${baht(P[o.v])} ฿</div></div>`).join("");
+// เปิดลิงก์แบบ #m6 ให้ไปที่อายุนั้นได้เลย
+const h0 = (location.hash||"").slice(1); if(AGES.some(a=>a.id===h0)) S.age=h0;
+render();
+</script>
+</body>
+</html>

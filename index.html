@@ -103,8 +103,7 @@ const P = { // ราคาวัคซีน (บาท/เข็ม)
 // main: วัคซีนหลัก · add: วัคซีนเสริมให้ติ๊กเลือก
 // type: "pcv" / "rota" = เปลี่ยนตามตัวเลือกด้านบน
 const AGES = [
-  {id:"m1", mo:1, tab:"1 ด.", sub:"แม่เป็นพาหะ HBV", title:"อายุ 1 เดือน", note:"เฉพาะเด็กที่แม่เป็นพาหะไวรัสตับอักเสบบี",
-    main:[{v:"Engerix-B", d:"ไวรัสตับอักเสบบี"}]},
+  {id:"m1", mo:1, tab:"1 ด.", title:"อายุ 1 เดือน", main:[]},
   {id:"m2", mo:2, tab:"2 ด.", title:"อายุ 2 เดือน",
     main:[{v:"Hexaxim", d:"6 โรค: คอตีบ-บาดทะยัก-ไอกรน-ตับอักเสบบี-ฮิบ-โปลิโอ"},{type:"rota",n:1},{type:"pcv",n:1}]},
   {id:"m4", mo:4, tab:"4 ด.", title:"อายุ 4 เดือน",
@@ -124,6 +123,8 @@ const AGES = [
 ];
 /* วัคซีนเสริม: แสดงทุกช่วงอายุที่อยู่ในช่วง min–max (เดือน) */
 const ADDONS = [
+  {v:"Engerix-B", min:1, max:1, d:"ไวรัสตับอักเสบบี · เฉพาะเด็กที่แม่เป็นพาหะไวรัสตับอักเสบบี"},
+  {v:"Beyfortus", min:0, max:24, d:"ภูมิคุ้มกันสำเร็จรูปป้องกัน RSV · อายุ 0–2 ปี · ฉีด 1 เข็ม ขนาดยาตามน้ำหนัก แพทย์พิจารณา"},
   {v:"Vaxigrip", min:6, max:999, d:"ไข้หวัดใหญ่ · ฉีดปีละครั้ง (ปีแรกที่ฉีด เด็กเล็กฉีด 2 เข็ม ห่าง 4 สัปดาห์)"},
   {v:"Enterovac", min:6, max:71, d:"โรคมือ-เท้า-ปาก (EV71) · อายุ 6 เดือน–5 ปี 11 เดือน · ฉีด 2 เข็ม ห่าง 1 เดือน"},
   {v:"Havrix 720", min:12, max:999, d:"ตับอักเสบเอ · ตั้งแต่ 1 ปี · ฉีด 2 เข็ม ห่าง 6–12 เดือน"},
@@ -131,7 +132,6 @@ const ADDONS = [
   {v:"Qdenga", min:48, max:999, d:"ไข้เลือดออก · ตั้งแต่ 4 ปี · ฉีด 2 เข็ม ห่าง 3 เดือน"}
 ];
 const OTHERS = [
-  {v:"Beyfortus", d:"ภูมิคุ้มกันสำเร็จรูปป้องกัน RSV"},
   {v:"Pneumovax 23", d:"ปอดอักเสบ ชนิดโพลีแซคคาไรด์ (PPSV23)"},
   {v:"Gardasil", d:"มะเร็งปากมดลูก HPV 4 สายพันธุ์"},
   {v:"Gardasil-9", d:"มะเร็งปากมดลูก HPV 9 สายพันธุ์"}
@@ -176,6 +176,7 @@ function render(){
   let h = `<div class="card"><h2>${a.title}</h2>${a.note?`<div class="note">${a.note}</div>`:""}
     ${opts?`<div class="opts" style="margin:10px 0 4px">${opts}</div>`:""}
     <div class="grp">วัคซีนตามช่วงอายุ</div>
+    ${main.length?"":'<div class="row"><div class="ds">ไม่มีวัคซีนตามกำหนดในช่วงอายุนี้</div></div>'}
     ${main.map(x=>`<div class="row"><div><div class="nm">${x.n}</div><div class="ds">${x.d}</div></div><div class="pr">${priceTag(x.price)}</div></div>`).join("")}`;
   if(adds.length){
     h += `<div class="grp">วัคซีนเสริมที่ฉีดได้ในช่วงอายุนี้ (แตะเพื่อเลือก)</div>` + adds.map(x=>`

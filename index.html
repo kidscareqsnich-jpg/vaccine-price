@@ -97,7 +97,7 @@ const FEE = { service: 720, perDose: 30, govReimburse: 50 };
 const P = { // ราคาวัคซีน (บาท/เข็ม)
   "Engerix-B":232, "Hexaxim":1267, "Pentaxim":928, "PCV13":1270, "PCV20":2533, "Rotarix":854,
   "Vaxigrip":192, "Enterovac":2697, "Havrix 720":725, "Varivax":850, "Boostrix-Polio":828,
-  "Qdenga":1639, "Beyfortus":13812, "Pneumovax 23":1304, "Gardasil":2564, "Gardasil-9":5593
+  "Qdenga":1639, "Beyfortus 50 mg":8200, "Beyfortus 100 mg":13812, "Pneumovax 23":1304, "Gardasil":2564, "Gardasil-9":5593
 };
 /* ================= ตารางตามช่วงอายุ ================= */
 // main: วัคซีนหลัก · add: วัคซีนเสริมให้ติ๊กเลือก
@@ -124,7 +124,8 @@ const AGES = [
 /* วัคซีนเสริม: แสดงทุกช่วงอายุที่อยู่ในช่วง min–max (เดือน) */
 const ADDONS = [
   {v:"Engerix-B", min:1, max:1, d:"ไวรัสตับอักเสบบี · เฉพาะเด็กที่แม่เป็นพาหะไวรัสตับอักเสบบี"},
-  {v:"Beyfortus", min:0, max:24, d:"ภูมิคุ้มกันสำเร็จรูปป้องกัน RSV · อายุ 0–2 ปี · ฉีด 1 เข็ม ขนาดยาตามน้ำหนัก แพทย์พิจารณา"},
+  {v:"Beyfortus 50 mg", min:0, max:24, grp:"rsv", d:"ภูมิคุ้มกันสำเร็จรูปป้องกัน RSV · อายุ 0–2 ปี · ขนาดสำหรับเด็กน้ำหนักน้อยกว่า 5 กก. · แพทย์เลือกขนาดตามน้ำหนัก"},
+  {v:"Beyfortus 100 mg", min:0, max:24, grp:"rsv", d:"ภูมิคุ้มกันสำเร็จรูปป้องกัน RSV · อายุ 0–2 ปี · ขนาดสำหรับเด็กน้ำหนัก 5 กก. ขึ้นไป · แพทย์เลือกขนาดตามน้ำหนัก"},
   {v:"Vaxigrip", min:6, max:999, d:"ไข้หวัดใหญ่ · ฉีดปีละครั้ง (ปีแรกที่ฉีด เด็กเล็กฉีด 2 เข็ม ห่าง 4 สัปดาห์)"},
   {v:"Enterovac", min:6, max:71, d:"โรคมือ-เท้า-ปาก (EV71) · อายุ 6 เดือน–5 ปี 11 เดือน · ฉีด 2 เข็ม ห่าง 1 เดือน"},
   {v:"Havrix 720", min:12, max:999, d:"ตับอักเสบเอ · ตั้งแต่ 1 ปี · ฉีด 2 เข็ม ห่าง 6–12 เดือน"},
@@ -160,7 +161,7 @@ function render(){
   if(!a){return;}
   const main = a.main.map(expand).filter(Boolean);
   const adds = ADDONS.filter(x=>a.mo>=x.min&&a.mo<=x.max)
-    .map(x=>({key:a.id+"-"+x.v, n:x.v, d:typeof x.d==="function"?x.d(a.mo):x.d, price:P[x.v]}));
+    .map(x=>({key:a.id+"-"+x.v, grp:x.grp, n:x.v, d:typeof x.d==="function"?x.d(a.mo):x.d, price:P[x.v]}));
   const chosen = adds.filter(x=>S.add[x.key]);
   const items = main.concat(chosen);
   const vac = items.reduce((s,x)=>s+x.price,0);
@@ -180,7 +181,7 @@ function render(){
     ${main.map(x=>`<div class="row"><div><div class="nm">${x.n}</div><div class="ds">${x.d}</div></div><div class="pr">${priceTag(x.price)}</div></div>`).join("")}`;
   if(adds.length){
     h += `<div class="grp">วัคซีนเสริมที่ฉีดได้ในช่วงอายุนี้ (แตะเพื่อเลือก)</div>` + adds.map(x=>`
-      <label class="addon"><input type="checkbox" data-key="${x.key}" ${S.add[x.key]?"checked":""}>
+      <label class="addon"><input type="checkbox" data-key="${x.key}" data-grp="${x.grp||""}" ${S.add[x.key]?"checked":""}>
       <div class="mid"><div class="nm p">${x.n}</div><div class="ds" style="font-size:13px;color:var(--muted)">${x.d}</div></div>
       <div class="pr p">${baht(x.price)} ฿</div></label>`).join("");
   }
@@ -193,7 +194,9 @@ function render(){
       ${S.right==="gov"?`<div class="reimb">ข้าราชการเบิกคืนได้ ${FEE.govReimburse} ฿ · จ่ายสุทธิ ${baht(total-FEE.govReimburse)} ฿</div>`:""}
     </div></div>`;
   $("result").innerHTML = h;
-  $("result").querySelectorAll("input[type=checkbox]").forEach(cb=>cb.addEventListener("change",()=>{S.add[cb.dataset.key]=cb.checked;render();}));
+  $("result").querySelectorAll("input[type=checkbox]").forEach(cb=>cb.addEventListener("change",()=>{
+    if(cb.checked&&cb.dataset.grp){$("result").querySelectorAll(`input[data-grp="${cb.dataset.grp}"]`).forEach(o=>{S.add[o.dataset.key]=false;});}
+    S.add[cb.dataset.key]=cb.checked;render();}));
 }
 
 // สร้างปุ่มอายุ

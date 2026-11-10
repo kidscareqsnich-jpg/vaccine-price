@@ -103,31 +103,34 @@ const P = { // ราคาวัคซีน (บาท/เข็ม)
 // main: วัคซีนหลัก · add: วัคซีนเสริมให้ติ๊กเลือก
 // type: "pcv" / "rota" = เปลี่ยนตามตัวเลือกด้านบน
 const AGES = [
-  {id:"m1", tab:"1 ด.", sub:"แม่เป็นพาหะ HBV", title:"อายุ 1 เดือน", note:"เฉพาะเด็กที่แม่เป็นพาหะไวรัสตับอักเสบบี",
+  {id:"m1", mo:1, tab:"1 ด.", sub:"แม่เป็นพาหะ HBV", title:"อายุ 1 เดือน", note:"เฉพาะเด็กที่แม่เป็นพาหะไวรัสตับอักเสบบี",
     main:[{v:"Engerix-B", d:"ไวรัสตับอักเสบบี"}]},
-  {id:"m2", tab:"2 ด.", title:"อายุ 2 เดือน",
+  {id:"m2", mo:2, tab:"2 ด.", title:"อายุ 2 เดือน",
     main:[{v:"Hexaxim", d:"6 โรค: คอตีบ-บาดทะยัก-ไอกรน-ตับอักเสบบี-ฮิบ-โปลิโอ"},{type:"rota",n:1},{type:"pcv",n:1}]},
-  {id:"m4", tab:"4 ด.", title:"อายุ 4 เดือน",
+  {id:"m4", mo:4, tab:"4 ด.", title:"อายุ 4 เดือน",
     main:[{v:"Pentaxim", d:"5 โรค: คอตีบ-บาดทะยัก-ไอกรน-ฮิบ-โปลิโอ"},{type:"rota",n:2},{type:"pcv",n:2}]},
-  {id:"m6", tab:"6 ด.", title:"อายุ 6 เดือน",
-    main:[{v:"Hexaxim", d:"6 โรค: คอตีบ-บาดทะยัก-ไอกรน-ตับอักเสบบี-ฮิบ-โปลิโอ"},{type:"rota",n:3},{type:"pcv",n:3}],
-    add:[{v:"Vaxigrip", d:"ไข้หวัดใหญ่ · ปีแรกฉีด 2 เข็ม แล้วฉีดปีละครั้ง"},
-         {v:"Enterovac", d:"โรคมือ-เท้า-ปาก (EV71) · ฉีด 2 เข็ม"}]},
-  {id:"m9", tab:"9 ด.", title:"อายุ 9 เดือน",
+  {id:"m6", mo:6, tab:"6 ด.", title:"อายุ 6 เดือน",
+    main:[{v:"Hexaxim", d:"6 โรค: คอตีบ-บาดทะยัก-ไอกรน-ตับอักเสบบี-ฮิบ-โปลิโอ"},{type:"rota",n:3},{type:"pcv",n:3}]},
+  {id:"m9", mo:9, tab:"9 ด.", title:"อายุ 9 เดือน",
     main:[{free:true, n:"MMR เข็มที่ 1", d:"หัด-คางทูม-หัดเยอรมัน"}]},
-  {id:"y1", tab:"1 ปี", title:"อายุ 1 ปี",
-    main:[{free:true, n:"CD-JE เข็มที่ 1", d:"ไข้สมองอักเสบเจอี ชนิดเชื้อเป็น"},{type:"pcv",n:4}],
-    add:[{v:"Havrix 720", d:"ตับอักเสบเอ · ฉีด 2 เข็ม"},{v:"Varivax", d:"อีสุกอีใส เข็มที่ 1"}]},
-  {id:"m18", tab:"1½ ปี", title:"อายุ 1 ปี 6 เดือน",
+  {id:"y1", mo:12, tab:"1 ปี", title:"อายุ 1 ปี",
+    main:[{free:true, n:"CD-JE เข็มที่ 1", d:"ไข้สมองอักเสบเจอี ชนิดเชื้อเป็น"},{type:"pcv",n:4}]},
+  {id:"m18", mo:18, tab:"1½ ปี", title:"อายุ 1 ปี 6 เดือน",
     main:[{free:true, n:"MMR เข็มที่ 2", d:"หัด-คางทูม-หัดเยอรมัน"},{v:"Pentaxim", d:"5 โรค: คอตีบ-บาดทะยัก-ไอกรน-ฮิบ-โปลิโอ"}]},
-  {id:"m30", tab:"2½ ปี", title:"อายุ 2 ปี 6 เดือน",
+  {id:"m30", mo:30, tab:"2½ ปี", title:"อายุ 2 ปี 6 เดือน",
     main:[{free:true, n:"CD-JE เข็มที่ 2", d:"ไข้สมองอักเสบเจอี ชนิดเชื้อเป็น"}]},
-  {id:"y4", tab:"4 ปี", title:"อายุ 4 ปี",
-    main:[{v:"Boostrix-Polio", d:"คอตีบ-บาดทะยัก-ไอกรน-โปลิโอ กระตุ้น"}],
-    add:[{v:"Varivax", d:"อีสุกอีใส เข็มที่ 2"}]}
+  {id:"y4", mo:48, tab:"4 ปี", title:"อายุ 4 ปี",
+    main:[{v:"Boostrix-Polio", d:"คอตีบ-บาดทะยัก-ไอกรน-โปลิโอ กระตุ้น"}]}
+];
+/* วัคซีนเสริม: แสดงทุกช่วงอายุที่อยู่ในช่วง min–max (เดือน) */
+const ADDONS = [
+  {v:"Vaxigrip", min:6, max:999, d:"ไข้หวัดใหญ่ · ฉีดปีละครั้ง (ปีแรกที่ฉีด เด็กเล็กฉีด 2 เข็ม ห่าง 4 สัปดาห์)"},
+  {v:"Enterovac", min:6, max:71, d:"โรคมือ-เท้า-ปาก (EV71) · อายุ 6 เดือน–5 ปี 11 เดือน · ฉีด 2 เข็ม ห่าง 1 เดือน"},
+  {v:"Havrix 720", min:12, max:999, d:"ตับอักเสบเอ · ตั้งแต่ 1 ปี · ฉีด 2 เข็ม ห่าง 6–12 เดือน"},
+  {v:"Varivax", min:12, max:999, d:m=>m>=48?"อีสุกอีใส เข็มที่ 2 (หรือเข็มแรกถ้ายังไม่เคยฉีด)":m>12?"อีสุกอีใส · ถ้ายังไม่เคยฉีด":"อีสุกอีใส เข็มที่ 1"},
+  {v:"Qdenga", min:48, max:999, d:"ไข้เลือดออก · ตั้งแต่ 4 ปี · ฉีด 2 เข็ม ห่าง 3 เดือน"}
 ];
 const OTHERS = [
-  {v:"Qdenga", d:"ไข้เลือดออก"},
   {v:"Beyfortus", d:"ภูมิคุ้มกันสำเร็จรูปป้องกัน RSV"},
   {v:"Pneumovax 23", d:"ปอดอักเสบ ชนิดโพลีแซคคาไรด์ (PPSV23)"},
   {v:"Gardasil", d:"มะเร็งปากมดลูก HPV 4 สายพันธุ์"},
@@ -156,7 +159,8 @@ function render(){
   const a = AGES.find(x=>x.id===S.age);
   if(!a){return;}
   const main = a.main.map(expand).filter(Boolean);
-  const adds = (a.add||[]).map((x,i)=>({key:a.id+"-"+i, n:x.v, d:x.d, price:P[x.v]}));
+  const adds = ADDONS.filter(x=>a.mo>=x.min&&a.mo<=x.max)
+    .map(x=>({key:a.id+"-"+x.v, n:x.v, d:typeof x.d==="function"?x.d(a.mo):x.d, price:P[x.v]}));
   const chosen = adds.filter(x=>S.add[x.key]);
   const items = main.concat(chosen);
   const vac = items.reduce((s,x)=>s+x.price,0);
@@ -174,7 +178,7 @@ function render(){
     <div class="grp">วัคซีนตามช่วงอายุ</div>
     ${main.map(x=>`<div class="row"><div><div class="nm">${x.n}</div><div class="ds">${x.d}</div></div><div class="pr">${priceTag(x.price)}</div></div>`).join("")}`;
   if(adds.length){
-    h += `<div class="grp">วัคซีนเสริม (แตะเพื่อเลือก)</div>` + adds.map(x=>`
+    h += `<div class="grp">วัคซีนเสริมที่ฉีดได้ในช่วงอายุนี้ (แตะเพื่อเลือก)</div>` + adds.map(x=>`
       <label class="addon"><input type="checkbox" data-key="${x.key}" ${S.add[x.key]?"checked":""}>
       <div class="mid"><div class="nm p">${x.n}</div><div class="ds" style="font-size:13px;color:var(--muted)">${x.d}</div></div>
       <div class="pr p">${baht(x.price)} ฿</div></label>`).join("");

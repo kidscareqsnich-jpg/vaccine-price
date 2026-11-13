@@ -78,7 +78,7 @@ h1{font-family:"Prompt",sans-serif;font-size:22px;margin:4px 0 2px;font-weight:6
     <div class="hint">แตะเลือกอายุด้านบน เพื่อดูวัคซีนและค่าใช้จ่ายของครั้งนั้น</div>
   </div>
 
-  <div class="sec others">
+  <div class="sec others" id="othersSec">
     <div class="lbl">วัคซีนทางเลือกอื่น (สอบถามแพทย์เรื่องอายุที่เหมาะสม)</div>
     <div class="card" id="others"></div>
   </div>
@@ -94,6 +94,7 @@ h1{font-family:"Prompt",sans-serif;font-size:22px;margin:4px 0 2px;font-weight:6
 <script>
 /* ================= ตั้งค่าราคา (แก้ตรงนี้ที่เดียว) ================= */
 const FEE = { service: 720, perDose: 30, govReimburse: 50 };
+const DESC = {}; // คำอธิบายจาก Google Sheet
 const P = { // ราคาวัคซีน (บาท/เข็ม)
   "Engerix-B":232, "Hexaxim":1267, "Pentaxim":928, "PCV13":1270, "PCV20":2533, "Rotarix":854,
   "Vaxigrip":192, "Enterovac":2697, "Havrix 720":725, "Varivax":850, "Boostrix-Polio":828,
@@ -151,7 +152,7 @@ function expand(item){
     return {n:`Rotarix ครั้งที่ ${item.n}`, d:"โรต้า (หยอด)", price:P.Rotarix};
   }
   if(item.free) return {n:item.n, d:item.d, price:0};
-  return {n:item.v, d:item.d, price:P[item.v]};
+  return {n:item.v, d:DESC[item.v]||item.d, price:P[item.v]};
 }
 const priceTag = p => p===0?'<span class="free">ฟรี</span>':baht(p)+" ฿";
 
@@ -205,10 +206,58 @@ $("ages").addEventListener("click",e=>{const b=e.target.closest(".age");if(!b)re
   try{history.replaceState(null,"","#"+S.age);}catch(_){}
   render();$("result").scrollIntoView({behavior:"smooth",block:"start"});});
 $("result").addEventListener("click",e=>{const b=e.target.closest(".seg button");if(!b)return;S[b.parentElement.dataset.k]=b.dataset.v;render();});
-$("others").innerHTML = OTHERS.map(o=>`<div class="row"><div><div class="nm">${o.v}</div><div class="ds">${o.d}</div></div><div class="pr">${baht(P[o.v])} ฿</div></div>`).join("");
+function renderOthers(){
+  $("others").innerHTML = OTHERS.map(o=>`<div class="row"><div><div class="nm">${o.v}</div><div class="ds">${o.d}</div></div><div class="pr">${baht(P[o.v])} ฿</div></div>`).join("");
+  $("othersSec").style.display = OTHERS.length?"":"none";
+}
+renderOthers();
 // เปิดลิงก์แบบ #m6 ให้ไปที่อายุนั้นได้เลย
 const h0 = (location.hash||"").slice(1); if(AGES.some(a=>a.id===h0)) S.age=h0;
 render();
+
+/* ================= โหลดข้อมูลล่าสุดจาก Google Sheet =================
+   ถ้าโหลดไม่ได้ หน้าเว็บจะใช้ข้อมูลที่ฝังไว้ด้านบนแทน */
+const SHEET_ID = "1RiABTIRFym-nE3dIFEV-cZ7AuFRbtyO4ogqqraSg3eg";
+function parseCSV(t){
+  const rows=[];let row=[],f="",q=false;
+  for(let i=0;i<t.length;i++){const c=t[i];
+    if(q){ if(c=='"'){ if(t[i+1]=='"'){f+='"';i++;} else q=false; } else f+=c; }
+    else if(c=='"') q=true;
+    else if(c==','){row.push(f);f="";}
+    else if(c=='\n'){row.push(f);rows.push(row);row=[];f="";}
+    else if(c!='\r') f+=c;
+  }
+  if(f!==""||row.length){row.push(f);rows.push(row);}
+  return rows;
+}
+const num = v => { const n=parseFloat(String(v).replace(/[^0-9.\-]/g,"")); return isNaN(n)?null:n; };
+async function getTab(name){
+  const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&headers=1&sheet=${encodeURIComponent(name)}`;
+  const r=await fetch(url,{cache:"no-store"}); if(!r.ok) throw new Error(r.status);
+  return parseCSV(await r.text()).slice(1);
+}
+async function loadFromSheet(){
+  try{
+    const [vac,fee]=await Promise.all([getTab("วัคซีน"),getTab("ค่าบริการ")]);
+    const add=[],oth=[],price={};
+    for(const r of vac){
+      const [name,pr,type,min,max,grp,desc,show]=r.map(x=>(x||"").trim());
+      if(!name) continue;
+      const p=num(pr); if(p===null) continue;
+      price[name]=p; if(desc) DESC[name]=desc;
+      if(String(show).toUpperCase()==="FALSE") continue;
+      if(type==="เสริม") add.push({v:name,min:num(min)??0,max:num(max)??999,grp:grp||undefined,d:desc});
+      else if(type==="อื่นๆ") oth.push({v:name,d:desc});
+    }
+    if(!Object.keys(price).length) return;
+    Object.assign(P,price);
+    ADDONS.length=0; ADDONS.push(...add);
+    OTHERS.length=0; OTHERS.push(...oth);
+    for(const r of fee){ const k=(r[2]||"").trim(), v=num(r[1]); if(k in FEE && v!==null) FEE[k]=v; }
+    renderOthers(); render();
+  }catch(e){ console.log("ใช้ข้อมูลสำรองในหน้าเว็บ:",e); }
+}
+loadFromSheet();
 </script>
 </body>
 </html>
